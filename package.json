@@ -1,0 +1,35 @@
+{
+  "name": "rops-plugin",
+  "version": "1.0.1",
+  "description": "base on V3版Miao-Yunzai",
+  "type": "module",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LisonEvf/rops-plugin.git"
+  },
+  "keywords": [
+    "ops",
+    "bot",
+    "YunZai"
+  ],
+  "author": "LisonEvf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LisonEvf/rops-plugin/issues"
+  },
+  "homepage": "https://github.com/LisonEvf/rops-plugin#readme",
+  "dependencies": {
+    "axios": "^1.2.2"
+  },
+  "pnpm": {
+    "patchedDependencies": {}
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0"
+  }
+}

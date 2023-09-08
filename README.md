@@ -1,2 +1,2 @@
 # rops-plugin
-Yunzai-Bot的远程运维插件
+基于V3版Miao-Yunzai的远程运维Bot插件
