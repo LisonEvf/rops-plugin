@@ -1,0 +1,1 @@
+{"help":{"help":{"command":"//帮助 //help //菜单","desc":"查看此帮助"},"desc":"rops帮助"},"job":{"master":{"command":{}},"whoami":{"command":{}},"desc":"任务管理"},"role":{"master":{"command":{}},"whoami":{"command":{}},"desc":"角色管理"},"server":{"addserver":{"command":{}},"delserver":{"command":{}},"desc":"服务器管理"}}
