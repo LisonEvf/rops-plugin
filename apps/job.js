@@ -2,10 +2,10 @@
 
 export default new App({
   name: 'job',
-  desc: '任务管理'
+  desc: '任务'
 }).config({
-  master: {
-    reg: /^\/\/master$/,
+  joblist: {
+    reg: /^\/\/joblist$/,
     check: (e) => {
       return e.isMaster
     },
@@ -13,8 +13,9 @@ export default new App({
         e.reply('you are master')
     }
   },
-  whoami: {
-    reg: /^\/\/whoami$/,
+
+  addjob: {
+    reg: /^\/\/addjob$/,
     func: (e) => {
       e.reply(`your QQNumber is ${e.user_id}`)
     }

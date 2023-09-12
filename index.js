@@ -29,8 +29,6 @@ const apps = {}
 for (const i in files) {
   const name = files[i].replace('.js', '')
 
-  if (name === 'template') continue
-
   if (ret[i].status !== 'fulfilled') {
     logger.error(`载入插件错误：${logger.red(name)}`)
     logger.error(ret[i].reason)
@@ -39,7 +37,7 @@ for (const i in files) {
   const AppCls = ret[i].value[Object.keys(ret[i].value)[0]]
   apps[name] = AppCls
   const app = new AppCls()
-  helpData[name] = app.help
+  helpData[name] = app.__helpDoc
 }
-fs.writeFileSync(`${Version.path}/data/help.json`, JSON.stringify(helpData))
+Version.saveDataSync('help', helpData)
 export { apps }

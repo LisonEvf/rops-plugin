@@ -1,11 +1,11 @@
 ﻿import lodash from 'lodash'
 import Plugin from './Plugin.js'
+import Permission from './Permission.js'
 
 export default class {
   constructor (info) {
     const rules = this.rules = []
-    const checks = this.checks = []
-    const help = this.help = {}
+    const __helpDoc = this.__helpDoc = {}
 
     this.plugin = class extends Plugin {
       constructor () {
@@ -17,17 +17,8 @@ export default class {
           // task: {},
           rule: rules
         })
-        help.desc = info.desc
-        this.help = help
-      }
-
-      accept (e) {
-        e.original_msg = e.original_msg || e.msg
-        for (const checkFunc of checks) {
-          if (checkFunc(e, e.original_msg)) {
-            return true
-          }
-        }
+        __helpDoc.desc = info.desc
+        this.__helpDoc = __helpDoc
       }
     }
   }
@@ -58,6 +49,7 @@ export default class {
         e.original_msg = e.original_msg || e.msg
 
         try {
+          Permission.check(e, rule)
           return await func.call(this, e)
         } catch (err) {
           if (err?.message) {
@@ -77,13 +69,10 @@ export default class {
         fnc: ruleKey
       })
 
-      if (rule.check) {
-        this.checks.push(rule.check)
-      }
-
-      this.help[ruleKey] = {
-        command: rule.command || (rule.event === 'poke' ? '戳一戳' : rule.reg),
-        desc: rule.desc || this.plugin.dsc
+      this.__helpDoc[ruleKey] = {
+        command: rule.command || (rule.event === 'poke' ? '戳一戳' : lodash.trim(rule.reg.toString(), '')),
+        desc: rule.desc || this.plugin.dsc,
+        permission: rule.permission || 999
       }
     }
     return this

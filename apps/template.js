@@ -1,4 +1,4 @@
-﻿import { App } from '../components/index.js'
+﻿import { App, Permission, Version } from '../components/index.js'
 
 export default new App({
   name: 'template',
@@ -6,19 +6,34 @@ export default new App({
   event: 'message',
   priority: 50
 }).config({
-  master: {
-    reg: /^\/\/master$/,
-    check: (e, msg) => {
-      return e.isMaster
-    },
-    func: (e) => {
-        e.reply('you are master')
+  helloworld: {
+    command: '//helloworld //helloWorld //Helloworld //HelloWorld',
+    desc: 'helloworld',
+
+    reg: /^\/\/(hello|Hello)(world|World)$/,
+    func: e => {
+        e.reply('Hello World!')
     }
   },
-  whoami: {
-    reg: /^\/\/whoami$/,
-    func: (e) => {
-      e.reply(`your QQNumber is ${e.user_id}`)
+
+  about: {
+    command: '//about //aboutme',
+    desc: '关于rops',
+
+    reg: /^\/\/about(me)?$/,
+    func: e => {
+      e.reply(`This is rops(Remote Operations)-plugint ${Version.version} base on Miao-Yunzai bot ${Version.botVersion}`)
+    }
+  },
+
+  info: {
+    command: '//info',
+    desc: '详情',
+
+    reg: /^\/\/info$/,
+    permission: Permission.master,
+    func: e => {
+      e.reply(`TOOD ${Version.name}`)
     }
   }
 }).plugin
