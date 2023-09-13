@@ -76,6 +76,7 @@ path: [工作路径 例如/srv/server]`)
     permission: Permission.admin,
     func: e => {
       Server.del(lodash.trim(e.msg.split('服务器')[1]))
+      e.reply('服务器删除成功')
     }
   },
 

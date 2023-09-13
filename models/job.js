@@ -5,7 +5,7 @@ if (Object.keys(jobs).length === 0) {
     jobs = {
         infoJobID: {
             name: '信息',
-            script: 'ls'
+            script: 'hostname;free -g'
         }
     }
 }

@@ -68,6 +68,7 @@ script: [shell script]`)
     permission: Permission.admin,
     func: e => {
       Job.del(lodash.trim(e.msg.split('任务')[1]))
+      e.reply('任务删除成功')
     }
   },
 
@@ -135,9 +136,18 @@ script: ${job.script}`)
 
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
         const cmd = `ssh ${callServer.sshc} "cd ${callServer.path};${callJob.script}"`
-        logger.info(cmd)
         const ret = await execSync(cmd)
-        e.reply(ret.stdout)
+        if (typeof ret.error === 'undefined') {
+          e.reply('Misson Complete')
+        } else {
+          await e.reply(ret.stdout)
+          e.reply(ret.error)
+        }
+        logger.info('==============执行命令==================')
+        logger.info(cmd)
+        logger.info('=>')
+        logger.info(ret.stdout)
+        logger.info('=======================================')
       }
 
       if (typeof callServer === 'undefined') {
