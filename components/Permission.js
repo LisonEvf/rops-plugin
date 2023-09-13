@@ -7,12 +7,8 @@ export default {
     data: Version.readDataSync('permission'),
 
     check (e, rule) {
-        if (e.isMaster) return
-        if (this.data[e.user_id] && rule.permission && this.data[e.user_id] > rule.permission) {
-            throw Error('permission denied', {
-                message: '权限不足'
-            })
-        }
+        if (e.isMaster) return true
+        return this.data[e.user_id] && rule.permission && this.data[e.user_id] <= rule.permission
     },
 
     getRole (e) {

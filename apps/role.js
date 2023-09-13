@@ -22,7 +22,7 @@ export default new App({
     reg: /^\/\/(添加|增加|新增)管理员[ |0-9]*$/,
     permission: Permission.master,
     func: e => {
-      const qqNum = /[0-9]*$/.exec(e.original_msg)[0]
+      const qqNum = /[0-9]*$/.exec(e.msg)[0]
       if (typeof qqNum === 'undefined') {
         e.reg('输入："//(添加|增加|新增)管理员" 后跟被添加者的QQ号')
         return
@@ -42,7 +42,7 @@ export default new App({
     reg: /^\/\/(删除|移除)管理员[ |0-9]*$/,
     permission: Permission.master,
     func: e => {
-      const qqNum = /[0-9]*$/.exec(e.original_msg)[0]
+      const qqNum = /[0-9]*$/.exec(e.msg)[0]
       if (typeof qqNum === 'undefined') {
         e.reg('输入："//(删除|移除)管理员" 后跟被添加者的QQ号')
         return

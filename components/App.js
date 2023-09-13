@@ -29,7 +29,7 @@ export default class {
         this.config(ruleKey, rule.func, rule)
       })
     } else {
-      ruleKey = lodash.camelCase(ruleKey)
+      ruleKey = lodash.startsWith(ruleKey, '_') ? ruleKey : lodash.camelCase(ruleKey)
       this.plugin.prototype[ruleKey] = async function (e) {
         e = this.e || e
         const selfID = e.self_id || e.bot?.uin || Bot.uin
@@ -49,7 +49,10 @@ export default class {
         e.original_msg = e.original_msg || e.msg
 
         try {
-          Permission.check(e, rule)
+          if (!Permission.check(e, rule)) {
+            e.reply('前面的区域，以后再来探索吧～')
+            return
+          }
           return await func.call(this, e)
         } catch (err) {
           if (err?.message) {
@@ -69,10 +72,12 @@ export default class {
         fnc: ruleKey
       })
 
-      this.__helpDoc[ruleKey] = {
-        command: rule.command || (rule.event === 'poke' ? '戳一戳' : lodash.trim(rule.reg.toString(), '')),
-        desc: rule.desc || this.plugin.dsc,
-        permission: rule.permission || 999
+      if (!lodash.startsWith(ruleKey, '_')) {
+        this.__helpDoc[ruleKey] = {
+          command: rule.command || (rule.event === 'poke' ? '戳一戳' : lodash.trim(rule.reg.toString(), '')),
+          desc: rule.desc || this.plugin.dsc,
+          permission: rule.permission || 999
+        }
       }
     }
     return this

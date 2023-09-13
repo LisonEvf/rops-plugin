@@ -5,50 +5,42 @@ export default new App({
     desc: 'rops帮助'
 }).config({
     help: {
-        command: '//帮助 //help //菜单',
-        desc: '查看此帮助',
-
-        reg: /^\/\/(帮助|help|菜单)$/,
-        func: e => {
-            const helpDoc = Version.readDataSync('help')
-            let helpText = ''
-
-            for (const plugin of helpDoc) {
-                helpText += `${plugin.desc}:\n`
-
-                for (const ruleK in plugin) {
-                    if (ruleK === 'desc') continue
-
-                    const rule = plugin[ruleK]
-                    if (rule.permission < Permission.getRole(e)[0]) continue
-                    helpText += `\t|${rule.desc}:\n\t|\t${rule.command}`
-                }
-            }
-            e.reply(helpText)
-        }
-    },
-
-    detailHelp: {
-        command: '//[模块名]帮助 //[模块名]菜单 例如：//任务帮助',
-        desc: '模块帮助',
+        command: '//帮助 //help //菜单 //[模块名]帮助 //[模块名]菜单 例如：//任务帮助',
+        desc: '查看本帮助',
 
         reg: /^\/\/(.*)(帮助|help|菜单)$/,
         func: e => {
             const modelName = /^\/\/(.*)(帮助|help|菜单)$/.exec(e.original_msg)[1]
 
             const helpDoc = Version.readDataSync('help')
-            let helpText = ''
 
-            for (const plugin of helpDoc) {
-                if (plugin.desc !== modelName) continue
-
-                helpText += `${plugin.desc}:\n`
-                for (const ruleK in plugin) {
+            for (const pluginK in helpDoc) {
+                for (const ruleK in helpDoc[pluginK]) {
                     if (ruleK === 'desc') continue
 
-                    const rule = plugin[ruleK]
-                    if (rule.permission < Permission.getRole(e)[0]) continue
-                    helpText += `\t|${rule.desc}:\n\t|\t${rule.command}`
+                    const rule = helpDoc[pluginK][ruleK]
+                    if (rule.permission < Permission.getRole(e)[0]) delete helpDoc[pluginK][ruleK]
+                }
+                if (Object.keys(helpDoc[pluginK]).length <= 1) {
+                    delete helpDoc[pluginK]
+                }
+            }
+
+            let helpText = ''
+
+            for (const pluginK in helpDoc) {
+                if (modelName !== '' && helpDoc[pluginK].desc !== modelName) continue
+
+                helpText += `【${helpDoc[pluginK].desc}】\n`
+
+                for (const ruleK in helpDoc[pluginK]) {
+                    if (ruleK === 'desc') continue
+
+                    const rule = helpDoc[pluginK][ruleK]
+                    helpText += `\t[${rule.desc}]:\n`
+                    for (const cmd of rule.command.split(' ')) {
+                        helpText += `\t|\t${cmd}\n`
+                    }
                 }
             }
             e.reply(helpText)
