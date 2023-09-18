@@ -116,7 +116,7 @@ path: ${server.path}`)
         pass: lodash.trim(lines[4].split(':')[1]),
         path: lodash.trim(lines[5].split(':')[1])
       })
-      e.reply('服务器添加成功')
+      e.reply('服务器修改成功')
     }
   },
 

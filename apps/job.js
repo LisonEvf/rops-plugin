@@ -31,7 +31,7 @@ export default new App({
       typeof Job.jobs[jobID].name !== 'undefined') {
         jobID = uuid()
       }
-      Job.serverPool[jobID] = {}
+      Job.jobs[jobID] = {}
 
       await e.reply('请按以下格式填写任务配置')
       e.reply(`//addJob
@@ -51,7 +51,7 @@ script: [shell script]`)
         return
       }
 
-      const script = lines.splice(2).join('\n').replace('script:', '')
+      const script = lines.splice(3).join('\n').replace('script:', '')
       Job.add(lodash.trim(lines[1]), {
         name: lodash.trim(lines[2].split(':')[1]),
         script
@@ -105,7 +105,7 @@ script: ${job.script}`)
         name: lodash.trim(lines[2].split(':')[1]),
         script
       })
-      e.reply('任务添加成功')
+      e.reply('任务修改成功')
     }
   },
 
@@ -118,8 +118,8 @@ script: ${job.script}`)
       const cmd = lodash.trim(e.msg.replace('///', ''))
       let callServer, callJob
 
-      if (Server.getGroupServerList().length === 1) {
-        callServer = Server.getGroupServerList()[0]
+      if (Server.getGroupServerList(e.group_id).length === 1) {
+        callServer = Server.getGroupServerList(e.group_id)[0]
       }
 
       for (const server of Object.values(Server.servers)) {
@@ -135,7 +135,7 @@ script: ${job.script}`)
       }
 
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
-        const cmd = `ssh ${callServer.sshc} "cd ${callServer.path};${callJob.script}"`
+        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} "cd ${callServer.path};${callJob.script}"`
         const ret = await execSync(cmd)
         if (typeof ret.error === 'undefined') {
           e.reply('Misson Complete')

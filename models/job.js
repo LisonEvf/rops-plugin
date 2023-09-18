@@ -57,6 +57,6 @@ export default {
     },
 
     save () {
-        return Version.saveDataSync('servers', this.jobs)
+        return Version.saveDataSync('jobs', this.jobs)
     }
 }
