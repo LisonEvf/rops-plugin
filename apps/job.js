@@ -118,10 +118,20 @@ script: ${job.script}`)
       const cmd = lodash.trim(e.msg.replace('///', ''))
       let callServer, callJob
 
-      if (Server.getGroupServerList(e.group_id).length === 1) {
-        const serverList = Server.getGroupServerList(e.group_id)[0]
-
-        for (const server of serverList) {
+      if (e.isGroup) {
+        const serverList = Server.getGroupServerList(e.group_id)
+        if (serverList.length === 1) {
+          callServer = serverList[0]
+        } else {
+          for (const server in serverList) {
+            if (cmd.indexOf(server.name) !== -1) {
+              callServer = server
+              break
+            }
+          }
+        }
+      } else {
+        for (const server of Object.values(Server.servers)) {
           if (cmd.indexOf(server.name) !== -1) {
             callServer = server
             break
@@ -139,8 +149,25 @@ script: ${job.script}`)
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
         const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} "cd ${callServer.path};${callJob.script}"`
         const ret = await execSync(cmd)
-        if (typeof ret.error === 'undefined') {
-          e.reply('Misson Complete')
+        if (ret.error === null) {
+          await e.reply('Misson Complete')
+          if (e.isGroup) {
+            e.reply(await e.group.makeForwardMsg([{
+              userInfo: {
+                nickname: 'rops-plugin',
+                user_id: 80000000
+              },
+              message: ret.stdout
+            }]))
+          } else {
+            e.reply(await e.friend.makeForwardMsg([{
+              userInfo: {
+                nickname: 'rops-plugin',
+                user_id: 80000000
+              },
+              message: ret.stdout
+            }]))
+          }
         } else {
           await e.reply(ret.stdout)
           e.reply(ret.error)
