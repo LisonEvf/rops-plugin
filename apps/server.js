@@ -32,11 +32,11 @@ export default new App({
     permission: Permission.admin,
     func: async function (e) {
       let serverID = uuid()
-      while (typeof Server.serverPool[serverID] !== 'undefined' &&
-       typeof Server.serverPool[serverID].sshc !== 'undefined') {
+      while (typeof Server.servers[serverID] !== 'undefined' &&
+       typeof Server.servers[serverID].sshc !== 'undefined') {
         serverID = uuid()
       }
-      Server.serverPool[serverID] = {}
+      Server.servers[serverID] = {}
 
       await e.reply('请按以下格式填写服务器配置')
       e.reply(`//addServer

@@ -76,7 +76,7 @@ script: [shell script]`)
     command: '//修改任务',
     desc: '修改任务',
 
-    reg: /^\/\/修改任务$/,
+    reg: /^\/\/修改任务(.*)$/,
     permission: Permission.admin,
     func: async e => {
       const jobID = lodash.trim(e.msg.split('任务')[1])
@@ -119,18 +119,20 @@ script: ${job.script}`)
       let callServer, callJob
 
       if (Server.getGroupServerList(e.group_id).length === 1) {
-        callServer = Server.getGroupServerList(e.group_id)[0]
-      }
+        const serverList = Server.getGroupServerList(e.group_id)[0]
 
-      for (const server of Object.values(Server.servers)) {
-        if (cmd.indexOf(server.name) !== -1) {
-          callServer = server
+        for (const server of serverList) {
+          if (cmd.indexOf(server.name) !== -1) {
+            callServer = server
+            break
+          }
         }
       }
 
       for (const job of Object.values(Job.jobs)) {
         if (cmd.indexOf(job.name) !== -1) {
           callJob = job
+          break
         }
       }
 

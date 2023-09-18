@@ -33,7 +33,7 @@ export default {
 
     del (jobID) {
         if (typeof this.jobs[jobID] === 'undefined') {
-            throw Error(`任务${jobID}不存在\n${this.getJobListText()}`)
+            throw Error(`同志，你找谁？\n${this.getJobListText()}`)
         }
         delete this.jobs[jobID]
 
@@ -42,7 +42,7 @@ export default {
 
     update (jobID, config) {
         if (typeof this.jobs[jobID] === 'undefined') {
-            throw Error(`任务${jobID}不存在，请先“//添加任务”以生成任务ID`)
+            throw Error(`同志，你找谁？\n${this.getJobListText()}`)
         }
         this.jobs[jobID] = config
 
@@ -51,7 +51,7 @@ export default {
 
     get (jobID) {
         if (typeof this.jobs[jobID] === 'undefined') {
-            throw Error(`任务${jobID}不存在，请先“//添加任务”以生成任务ID`)
+            throw Error(`同志，你找谁？\n${this.getJobListText()}`)
         }
         return this.jobs[jobID]
     },
