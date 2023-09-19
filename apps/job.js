@@ -83,7 +83,7 @@ script: [shell script]`)
       const job = Job.get(jobID)
 
       await e.reply('请按以下格式填写任务配置')
-      e.reply(`//addJob
+      e.reply(`//updateJob
 ${jobID}
 name: ${job.name}
 script: ${job.script}`)
@@ -100,7 +100,7 @@ script: ${job.script}`)
         return
       }
 
-      const script = lines.splice(2).join('\n').replace('script:', '')
+      const script = lines.splice(3).join('\n').replace('script:', '')
       Job.update(lodash.trim(lines[1]), {
         name: lodash.trim(lines[2].split(':')[1]),
         script
@@ -147,26 +147,22 @@ script: ${job.script}`)
       }
 
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
-        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} "cd ${callServer.path};${callJob.script}"`
+        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} ". ~/.bash_profile;. /etc/profile;cd ${callServer.path};${callJob.script}"`
+        e.reply(`好嘞！${callServer.name}开始执行${callJob.name}!`, false, { recallMsg: 10 })
         const ret = await execSync(cmd)
         if (ret.error === null) {
           await e.reply('Misson Complete')
+          const forwardMsg = [{
+            userInfo: {
+              nickname: 'rops-plugin',
+              user_id: 80000000
+            },
+            message: ret.stdout
+          }]
           if (e.isGroup) {
-            e.reply(await e.group.makeForwardMsg([{
-              userInfo: {
-                nickname: 'rops-plugin',
-                user_id: 80000000
-              },
-              message: ret.stdout
-            }]))
+            e.reply(await e.group.makeForwardMsg(forwardMsg))
           } else {
-            e.reply(await e.friend.makeForwardMsg([{
-              userInfo: {
-                nickname: 'rops-plugin',
-                user_id: 80000000
-              },
-              message: ret.stdout
-            }]))
+            e.reply(await e.friend.makeForwardMsg(forwardMsg))
           }
         } else {
           await e.reply(ret.stdout)
