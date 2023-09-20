@@ -151,7 +151,7 @@ script: ${job.script}`)
         e.reply('Copy That', false, { recallMsg: 10 })
         const ret = await execSync(cmd)
         if (ret.error === null) {
-          await e.reply('Misson Complete', false, { recallMsg: 10 })
+          await e.reply('Misson Complete', true, { recallMsg: 10 })
           const forwardMsg = [{
             userInfo: {
               nickname: 'rops-plugin',
