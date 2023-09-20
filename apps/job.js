@@ -147,11 +147,11 @@ script: ${job.script}`)
       }
 
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
-        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} ". ~/.bash_profile;. /etc/profile;cd ${callServer.path};${callJob.script}"`
-        e.reply(`好嘞！${callServer.name}开始执行${callJob.name}!`, false, { recallMsg: 10 })
+        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} '. ~/.bash_profile;. /etc/profile;cd ${callServer.path};${callJob.script}'`
+        e.reply('Copy That', false, { recallMsg: 10 })
         const ret = await execSync(cmd)
         if (ret.error === null) {
-          await e.reply('Misson Complete')
+          await e.reply('Misson Complete', false, { recallMsg: 10 })
           const forwardMsg = [{
             userInfo: {
               nickname: 'rops-plugin',
@@ -165,8 +165,10 @@ script: ${job.script}`)
             e.reply(await e.friend.makeForwardMsg(forwardMsg))
           }
         } else {
-          await e.reply(ret.stdout)
-          e.reply(ret.error)
+          if (ret.stdout) {
+            await e.reply(JSON.stringify(ret.stdout))
+          }
+          e.reply(JSON.stringify(ret.error))
         }
         logger.info('==============执行命令==================')
         logger.info(cmd)
