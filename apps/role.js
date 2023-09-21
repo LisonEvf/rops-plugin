@@ -27,11 +27,8 @@ export default new App({
         e.reg('输入："//(添加|增加|新增)管理员" 后跟被添加者的QQ号')
         return
       }
-      if (Permission.add(qqNum)) {
-        e.reply(`${qqNum}添加管理员成功`)
-      } else {
-        e.reply(`${qqNum}添加管理员失败！`)
-      }
+      Permission.add(qqNum)
+      e.reply(`${qqNum}添加管理员成功`)
     }
   },
 
@@ -47,11 +44,8 @@ export default new App({
         e.reg('输入："//(删除|移除)管理员" 后跟被添加者的QQ号')
         return
       }
-      if (Permission.add(qqNum)) {
-        e.reply(`${qqNum}添加管理员成功`)
-      } else {
-        e.reply(`${qqNum}添加管理员失败！`)
-      }
+      Permission.add(qqNum)
+      e.reply(`${qqNum}删除管理员成功`)
     }
   },
 

@@ -16,10 +16,8 @@ export default new App({
     func: e => {
       if (e.isGroup) {
         e.reply(Server.getGroupServerListText(e.group_id))
-      } else if (Permission.check(e)) {
-        e.reply(Server.getServerListText())
       } else {
-        e.reply('前面的区域，以后再来探索吧～')
+        e.reply(Server.getServerListText())
       }
     }
   },

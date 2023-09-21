@@ -8,7 +8,8 @@ export default {
 
     check (e, rule) {
         if (e.isMaster) return true
-        return this.data[e.user_id] && rule.permission && this.data[e.user_id] <= rule.permission
+        if (typeof rule.permission === 'undefined') return true
+        return this.data[e.user_id] && rule.permission && this.getRole(e.user_id)[0] <= rule.permission
     },
 
     getRole (e) {
