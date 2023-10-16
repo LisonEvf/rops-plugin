@@ -147,27 +147,12 @@ script: ${job.script}`)
       }
 
       if (typeof callServer !== 'undefined' && typeof callJob !== 'undefined') {
-        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} '. ~/.bash_profile;. /etc/profile;cd ${callServer.path};${callJob.script};export LC_CTYPE=en_US.UTF-8;'`
+        const cmd = /** echo ${callServer.pass} |  */`ssh ${callServer.sshc} '. ~/.bash_profile;. /etc/profile;export LC_CTYPE=en_US.UTF-8;cd ${callServer.path};${callJob.script};'`
         e.reply('Copy That', false, { recallMsg: 10 })
         const ret = await execSync(cmd)
         if (ret.error === null) {
           e.reply('Misson Complete', true)
-          // const forwardMsg = [{
-          //   userInfo: {
-          //     nickname: 'rops-plugin',
-          //     user_id: 80000000
-          //   },
-          //   message: ret.stdout
-          // }]
-          // if (e.isGroup) {
-          //   e.reply(await e.group.makeForwardMsg(forwardMsg))
-          // } else {
-          //   e.reply(await e.friend.makeForwardMsg(forwardMsg))
-          // }
         } else {
-          // if (ret.stdout) {
-          //   await e.reply(JSON.stringify(ret.stdout))
-          // }
           e.reply('Misson Fail', true)
         }
         logger.info('==============执行命令==================')
